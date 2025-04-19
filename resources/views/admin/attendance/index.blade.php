@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Acun-Digital | Attendance
+    Eagle Golf Indo | Attendance
 @endsection
 
 @section('css')

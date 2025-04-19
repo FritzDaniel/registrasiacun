@@ -1,14 +1,14 @@
 @extends('auth.layouts.app')
 
 @section('title')
-    ACUN-DIGITAL | Login
+    Eagle Golf Indo | Login
 @endsection
 
 @section('content')
 
     <div class="login-box">
         <div class="login-logo">
-            <a href="https://pvotdigital.com"><b>Acun</b>Digital</a>
+            <a href="https://www.eaglegolfindo.com"><b>Eagle</b> Golf Indo</a>
         </div>
         <!-- /.login-logo -->
         <div class="card">

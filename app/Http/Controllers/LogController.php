@@ -7,6 +7,11 @@ use App\Models\Logs;
 
 class LogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index() 
     {
         $logs = Logs::orderBy('created_at','DESC')->simplePaginate(10);

@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Acun-Digital | Dashboard
+    Eagle Golf Indo | Dashboard
 @endsection
 
 @section('css')

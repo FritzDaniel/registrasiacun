@@ -7,9 +7,17 @@ use App\Models\Participant;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Logs;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Carbon\Carbon;
 
 class ParticipantController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index() {
         $participant = Participant::orderBy('unique_code', 'ASC')->get();
         return view('admin.participant.index',compact('participant'));
@@ -119,4 +127,52 @@ class ParticipantController extends Controller
         return redirect('/dashboard/participant/detail/' . $id)->with('message','Participant attendance removed.');
     }
 
+    public function export()
+    {
+        $type = "xls";
+        $participants = Participant::whereNotNull('absence_time') // ambil yang hadir
+                        ->orderBy('created_at', 'DESC')
+                        ->limit(5)
+                        ->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Name');
+        $sheet->setCellValue('B1', 'Company');
+
+        $row = 2;
+
+        foreach ($participants as $par) {
+            $sheet->setCellValue('A' . $row, $par->name);
+            $sheet->setCellValue('B' . $row, $par->company);
+            $row++;
+        }
+
+        $fileName = 'participants_' . now()->format('Ymd_His') . '.xls';
+
+        // Set header manual
+        header('Content-Type: application/vnd.ms-excel');
+        header("Content-Disposition: attachment;filename=\"$fileName\"");
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xls($spreadsheet);
+        $writer->save('php://output'); // langsung output ke browser
+        exit;
+    }
+
+    public function attend($id) {
+        $people = Participant::where('id', $id)
+            ->where('eligible_to_attend','=', 1)
+            ->first();
+        $people->absence_time = Carbon::now();
+        $people->update();
+
+        $log = new Logs();
+        $log->user_id = Auth::user()->id;
+        $log->message = $people->name . " was attended and confirmed by " . Auth::user()->name;
+        $log->action = "Participant";
+        $log->save();
+
+        return redirect()->back()->with('message','Peserta sudah di nyatakan hadir');
+    }
 }

@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Acun-Digital | Participant
+    Eagle Golf Indo | Participant
 @endsection
 
 @section('css')
@@ -42,6 +42,9 @@
                     </div>
                     <div class="card-body">
                         <a href="{{ route('participant.create') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add Participant</a>
+                        @if(Auth::user()->id == 1)
+                            <a href="{{ route('participant.export') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Participant</a>
+                        @endif
                         <div class="dataTables_wrapper dt-bootstrap4">
                             <table id="datatable" class="table table-bordered table-hover dataTable dtr-inline">
                                 <thead>
@@ -78,7 +81,12 @@
                                         <td>
                                             <a href="{{ route('participant.detail', $par->id) }}" class="btn btn-sm btn-warning">Detail</a>
                                             <a href="{{ route('participant.edit', $par->id)}}" class="btn btn-sm btn-info">Edit</a>
-                                            <a href="{{ route('participant.delete', $par->id) }}" class="btn btn-sm btn-danger confirm">Delete</a>
+                                            @if(Auth::user()->id == 1)
+                                                <a href="{{ route('participant.delete', $par->id) }}" class="btn btn-sm btn-danger confirm">Delete</a>
+                                            @endif
+                                            @if($par->absence_time == null) 
+                                                <a href="{{ route('participant.attend', $par->id) }}" class="btn btn-sm btn-success confirm2">Attend</a>                                            
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -119,6 +127,16 @@
         $(document).ready(function(){
             $("a.confirm").click(function(e){
                 if(!confirm('Are you sure want to delete this participant?')){
+                    e.preventDefault();
+                    return false;
+                }
+                return true;
+            });
+        });
+
+        $(document).ready(function(){
+            $("a.confirm2").click(function(e){
+                if(!confirm('Are you sure want to attend this participant?')){
                     e.preventDefault();
                     return false;
                 }

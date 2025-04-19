@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/" class="brand-link" style="text-align: center">
-        <span class="brand-text font-weight-light"><strong>Acun</strong> Digital</span>
+        <span class="brand-text font-weight-light"><strong>Eagle</strong> Golf Indo</span>
     </a>
 
     <!-- Sidebar -->

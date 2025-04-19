@@ -32,6 +32,9 @@ Route::get('/dashboard/participant/edit/{id}', [ParticipantController::class, 'e
 Route::post('/dashboard/participant/update/{id}', [ParticipantController::class, 'update'])->name('participant.update');
 Route::get('/dashboard/participant/delete/{id}', [ParticipantController::class, 'delete'])->name('participant.delete');
 Route::get('/dashboard/participant/attend/undo/{id}', [ParticipantController::class, 'undoAttend'])->name('participant.undoAttend');
+Route::get('/dashboard/participant/export', [ParticipantController::class, 'export'])->name('participant.export');
+Route::get('/dashboard/participant/attend/{id}', [ParticipantController::class, 'attend'])->name('participant.attend');
+
 
 // Account
 Route::get('/dashboard/account',[UserController::class, 'index'])->name('account');
